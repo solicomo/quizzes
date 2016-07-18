@@ -15,20 +15,37 @@ public:
 	vector<int> twoSum(vector<int>& nums, int target)
 	{
 		vector<int> ret;
-		unordered_map<int, int> nm;
+		vector<pair<int, int> > nm;
+		
+		auto len = nums.size();
 
-		for (auto i = 0; i < nums.size(); ++i)
+		if (len < 2)
+			return ret;
+
+		for (auto i = 0; i < len; ++i)
 		{
-			auto it = nm.find(target - nums[i]);
+			nm.push_back(make_pair(nums[i], i));
+		}
 
-			if (it == nm.end())
+		sort(nm.begin(), nm.end(), [](const pair<int, int>& a, const pair<int, int>& b)->bool {
+				return a.first < b.first;
+		});
+
+		for (auto b = nm.begin(), e = --nm.end(); b != e; )
+		{
+			auto sum = b->first + e->first;
+
+			if (sum < target)
+				b++;
+			else if (sum > target)
+				e--;
+			else
 			{
-				nm[nums[i]] = i;
-				continue;
-			}
+				ret.push_back(b->second);
+				ret.push_back(e->second);
 
-			ret.push_back(it->second);
-			ret.push_back(i);
+				return ret;
+			}
 		}
 
 		return ret;
