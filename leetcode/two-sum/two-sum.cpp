@@ -14,12 +14,10 @@ class Solution {
 public:
 	vector<int> twoSum(vector<int>& nums, int target)
 	{
-		vector<int> ret;
-
 		auto len = nums.size();
 
 		if (len < 2)
-			return ret;
+			return {};
 
 		vector<int> nv = nums;
 
@@ -27,7 +25,9 @@ public:
 
 		for (auto b = nv.begin(), e = --nv.end(); b != e; )
 		{
-			auto sum = *b + *e;
+			auto m = *b;
+			auto n = *e;
+			auto sum = m + n;
 
 			if (sum < target)
 				b++;
@@ -36,36 +36,35 @@ public:
 			else
 			{
 				int another;
-				size_t i = 0;
+				int i = 0;
 
-				for ( ; i < nums.size(); ++i)
+				for ( ; i < len; ++i)
 				{
-					if (nums[i] == *b)
+					if (nums[i] == m)
 					{
-						ret.push_back(i);
-						another = *e;
+						another = n;
 						break;
 					}
-					else if (nums[i] == *e)
+					else if (nums[i] == n)
 					{
-						ret.push_back(i);
-						another = *b;
+						another = m;
 						break;
 					}
 				}
 
-				for (i++ ; i < nums.size(); ++i)
+				int j = i + 1;
+
+				for ( ; j < len; ++j)
 				{
-					if (nums[i] == another)
+					if (nums[j] == another)
 					{
-						ret.push_back(i);
-						return ret;
+						return {i,j};
 					}
 				}
 			}
 		}
 
-		return ret;
+		return {};
 	}
 };
 
