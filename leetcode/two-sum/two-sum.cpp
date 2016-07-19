@@ -15,7 +15,7 @@ public:
 	vector<int> twoSum(vector<int>& nums, int target)
 	{
 		vector<int> ret;
-		vector<pair<int, int> > nm;
+		multimap<int, int> nm;
 		
 		auto len = nums.size();
 
@@ -24,12 +24,8 @@ public:
 
 		for (auto i = 0; i < len; ++i)
 		{
-			nm.push_back(make_pair(nums[i], i));
+			nm.emplace(nums[i], i);
 		}
-
-		sort(nm.begin(), nm.end(), [](const pair<int, int>& a, const pair<int, int>& b)->bool {
-				return a.first < b.first;
-		});
 
 		for (auto b = nm.begin(), e = --nm.end(); b != e; )
 		{
