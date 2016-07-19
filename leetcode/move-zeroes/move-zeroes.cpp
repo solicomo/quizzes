@@ -16,20 +16,36 @@ class Solution
 public:
 	void moveZeroes(vector<int>& nums)
 	{
-		size_t i = 0;
+		auto head = nums.data();
+		auto tail = head + nums.size();
 
-		for ( ; i < nums.size() && nums[i] != 0; ++i)
+		for ( ; head < tail && *head != 0; ++head)
 			; // do nothing
 
-		for (auto j = i + 1; j < nums.size(); ++j)
+		auto numt = head;
+
+		while(numt < tail)
 		{
-			if (nums[j] != 0)
-			{
-				nums[i] = nums[j];
-				nums[j] = 0;
-				i++;
-			}
+			auto numh = numt + 1;
+
+			for ( ; numh < tail && *numh == 0; ++numh)
+				; // do nothing
+
+			if (numh == tail)
+				break;
+
+			numt = numh + 1;
+
+			for ( ; numt < tail && *numt != 0; ++numt)
+				; // do nothing
+
+			memmove(head, numh, sizeof(int) * (numt - numh));
+
+			head += numt - numh;
 		}
+
+		if (head < tail)
+			memset(head, 0, sizeof(int) * (tail - head));
 	}
 };
 
