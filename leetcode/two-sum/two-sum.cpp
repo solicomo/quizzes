@@ -19,49 +19,34 @@ public:
 		if (len < 2)
 			return {};
 
-		vector<int> nv = nums;
+		int min = nums[0], max = min;
 
-		sort(nv.begin(), nv.end());
-
-		for (auto b = nv.begin(), e = --nv.end(); b != e; )
+		for (auto n : nums)
 		{
-			auto m = *b;
-			auto n = *e;
-			auto sum = m + n;
+			if (n < min)
+				min = n;
+			else if (n > max)
+				max = n;
+		}
 
-			if (sum < target)
-				b++;
-			else if (sum > target)
-				e--;
+		int mmin = (target - max > min) ? target - max : min;
+		int mmax = (target - min < max) ? target - min : max;
+		int nmap[mmax - mmin + 1];
+		
+		memset(nmap, 0, sizeof(nmap));
+
+		for (auto i = 0; i < len; ++i)
+		{
+			auto n = nums[i];
+
+			if (n < mmin || n > mmax)
+				continue;
+
+			auto j = nmap[target - n - mmin];
+			if (j == 0)
+				nmap[n - mmin] = i + 1;
 			else
-			{
-				int another;
-				int i = 0;
-
-				for ( ; i < len; ++i)
-				{
-					if (nums[i] == m)
-					{
-						another = n;
-						break;
-					}
-					else if (nums[i] == n)
-					{
-						another = m;
-						break;
-					}
-				}
-
-				int j = i + 1;
-
-				for ( ; j < len; ++j)
-				{
-					if (nums[j] == another)
-					{
-						return {i,j};
-					}
-				}
-			}
+				return {j-1, i};
 		}
 
 		return {};
