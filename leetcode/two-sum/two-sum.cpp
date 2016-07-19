@@ -15,21 +15,19 @@ public:
 	vector<int> twoSum(vector<int>& nums, int target)
 	{
 		vector<int> ret;
-		multimap<int, int> nm;
-		
+
 		auto len = nums.size();
 
 		if (len < 2)
 			return ret;
 
-		for (auto i = 0; i < len; ++i)
-		{
-			nm.emplace(nums[i], i);
-		}
+		vector<int> nv = nums;
 
-		for (auto b = nm.begin(), e = --nm.end(); b != e; )
+		sort(nv.begin(), nv.end());
+
+		for (auto b = nv.begin(), e = --nv.end(); b != e; )
 		{
-			auto sum = b->first + e->first;
+			auto sum = *b + *e;
 
 			if (sum < target)
 				b++;
@@ -37,13 +35,37 @@ public:
 				e--;
 			else
 			{
-				ret.push_back(b->second);
-				ret.push_back(e->second);
+				int another;
+				size_t i = 0;
 
-				return ret;
+				for ( ; i < nums.size(); ++i)
+				{
+					if (nums[i] == *b)
+					{
+						ret.push_back(i);
+						another = *e;
+						break;
+					}
+					else if (nums[i] == *e)
+					{
+						ret.push_back(i);
+						another = *b;
+						break;
+					}
+				}
+
+				for (i++ ; i < nums.size(); ++i)
+				{
+					if (nums[i] == another)
+					{
+						ret.push_back(i);
+						return ret;
+					}
+				}
 			}
 		}
 
 		return ret;
 	}
 };
+
